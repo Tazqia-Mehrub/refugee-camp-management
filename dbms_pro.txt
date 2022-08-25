@@ -1,0 +1,953 @@
+SQL> select doctor_name,phone_number,specialist,checkup_date from medical;
+select doctor_name,phone_number,specialist,checkup_date from medical
+                   *
+ERROR at line 1:
+ORA-00904: "PHONE_NUMBER": invalid identifier 
+
+
+SQL> select doctor_name,specialist,checkup_date from medical;
+
+DOCTOR_NAME          SPECIALIST           CHECKUP_D                             
+-------------------- -------------------- ---------                             
+DR.HOSNE ARA         GYNAECOLOGIST        10-SEP-17                             
+DR.FOZLE RABBI       MEDICINE             11-SEP-17                             
+DR.SHARMIN           ENT                  11-SEP-17                             
+DR.ABU JAFAR         ORTHOPEADIC          12-SEP-17                             
+DR.KIBRIA            MEDICINE             13-SEP-17                             
+DR.EASHNA            CHILD-PEDIAIRIC      13-SEP-17                             
+DR.TAZKIRA           GYNAECOLOGIST        14-SEP-17                             
+DR.RAFI              MEDICINE             13-SEP-17                             
+
+8 rows selected.
+
+SQL> select doctor_name,specialist,checkup_date+7 as next_checkup_date from medical;
+
+DOCTOR_NAME          SPECIALIST           NEXT_CHEC                             
+-------------------- -------------------- ---------                             
+DR.HOSNE ARA         GYNAECOLOGIST        17-SEP-17                             
+DR.FOZLE RABBI       MEDICINE             18-SEP-17                             
+DR.SHARMIN           ENT                  18-SEP-17                             
+DR.ABU JAFAR         ORTHOPEADIC          19-SEP-17                             
+DR.KIBRIA            MEDICINE             20-SEP-17                             
+DR.EASHNA            CHILD-PEDIAIRIC      20-SEP-17                             
+DR.TAZKIRA           GYNAECOLOGIST        21-SEP-17                             
+DR.RAFI              MEDICINE             20-SEP-17                             
+
+8 rows selected.
+
+SQL> select doctor_name from medical where specialist='CHILD-PEDIATRIC';
+
+no rows selected
+
+SQL> select doctor_name from medical where specialist='CHILD-PEDIAIRIC';
+
+DOCTOR_NAME                                                                     
+--------------------                                                            
+DR.EASHNA                                                                       
+
+SQL> select doctor_name,CHECKUP_DATE+7 AS NEXT_CHECKUP_DATE from medical where specialist='CHILD-PEDIAIRIC';
+
+DOCTOR_NAME          NEXT_CHEC                                                  
+-------------------- ---------                                                  
+DR.EASHNA            20-SEP-17                                                  
+
+SQL> select doctor_name,CHECKUP_DATE+7 AS NEXT_CHECKUP_DATE from medical where specialist='MEDICINE';
+
+DOCTOR_NAME          NEXT_CHEC                                                  
+-------------------- ---------                                                  
+DR.FOZLE RABBI       18-SEP-17                                                  
+DR.KIBRIA            20-SEP-17                                                  
+DR.RAFI              20-SEP-17                                                  
+
+SQL> select DOCTOR_iD, doctor_name,CHECKUP_DATE+7 AS NEXT_CHECKUP_DATE from medical where specialist='MEDICINE';
+
+ DOCTOR_ID DOCTOR_NAME          NEXT_CHEC                                       
+---------- -------------------- ---------                                       
+         2 DR.FOZLE RABBI       18-SEP-17                                       
+         5 DR.KIBRIA            20-SEP-17                                       
+         8 DR.RAFI              20-SEP-17                                       
+
+SQL> select DOCTOR_iD, doctor_name,CHECKUP_DATE+7 AS NEXT_CHECKUP_DATE from medical where specialist='MEDICINE' AND DOCTOR_NAME='DR.RAFI';
+
+ DOCTOR_ID DOCTOR_NAME          NEXT_CHEC                                       
+---------- -------------------- ---------                                       
+         8 DR.RAFI              20-SEP-17                                       
+
+SQL> CREATE VIEW DOC_INFO AS SELECT DOCTOR_NAME,SPECIALIST,CHECKUP_DATE+7 AS NEXT_CHECKUP FROM MEDICAL;
+
+View created.
+
+SQL> SELECT*FROM DOC_INFO;
+
+DOCTOR_NAME          SPECIALIST           NEXT_CHEC                             
+-------------------- -------------------- ---------                             
+DR.HOSNE ARA         GYNAECOLOGIST        17-SEP-17                             
+DR.FOZLE RABBI       MEDICINE             18-SEP-17                             
+DR.SHARMIN           ENT                  18-SEP-17                             
+DR.ABU JAFAR         ORTHOPEADIC          19-SEP-17                             
+DR.KIBRIA            MEDICINE             20-SEP-17                             
+DR.EASHNA            CHILD-PEDIAIRIC      20-SEP-17                             
+DR.TAZKIRA           GYNAECOLOGIST        21-SEP-17                             
+DR.RAFI              MEDICINE             20-SEP-17                             
+
+8 rows selected.
+
+SQL> SELECT COUNT(SPECIALIST) FROM MEDICAL GROUP BY SPECIALIST;
+
+COUNT(SPECIALIST)                                                               
+-----------------                                                               
+                2                                                               
+                1                                                               
+                3                                                               
+                1                                                               
+                1                                                               
+
+SQL> SELECT SPECIALIST,COUNT(SPECIALIST) FROM MEDICAL GROUP BY SPECIALIST;
+
+SPECIALIST           COUNT(SPECIALIST)                                          
+-------------------- -----------------                                          
+GYNAECOLOGIST                        2                                          
+ENT                                  1                                          
+MEDICINE                             3                                          
+ORTHOPEADIC                          1                                          
+CHILD-PEDIAIRIC                      1                                          
+
+SQL> SELECT COUNT(DOCTOR_NAME) FROM MEDICAL;
+
+COUNT(DOCTOR_NAME)                                                              
+------------------                                                              
+                 8                                                              
+
+SQL> SELECT COUNT(DOCTOR_NAME) AS TOTAL_DOC FROM MEDICAL;
+
+ TOTAL_DOC                                                                      
+----------                                                                      
+         8                                                                      
+
+SQL> SELECT DOCTOR_NAME,SPECIALIST,DISTRIBUTOR_NAME FROM DISTRIBUTION D LEFT JOIN SERVICE S ON D.COLUMN1=S.DISTRIBUTOR_ID LEFT JOIN MEDICAL M ON S.DOCTOR_ID=M.DOCTOR_ID
+  2  ;
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+                                          taz                                   
+                                          Safa                                  
+                                          seema                                 
+                                          Ratul                                 
+                                          habib                                 
+                                          zerin                                 
+                                          momin                                 
+                                          faisal                                
+                                          didar                                 
+                                          Mridul                                
+                                          Elan                                  
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+                                          Alex                                  
+                                          firoz                                 
+                                          faisal                                
+
+14 rows selected.
+
+SQL> SELECT DOCTOR_NAME,SPECIALIST,DISTRIBUTOR_NAME FROM DISTRIBUTION D LEFT JOIN SERVICE S ON D.COLUMN1=S.DISTRIBUTOR_ID LEFT JOIN MEDICAL M ON S.DOCTOR_ID=M.DOCTOR_ID;
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+DR.HOSNE ARA         GYNAECOLOGIST        firoz                                 
+DR.FOZLE RABBI       MEDICINE             Elan                                  
+DR.SHARMIN           ENT                  Alex                                  
+DR.ABU JAFAR         ORTHOPEADIC          Ratul                                 
+DR.KIBRIA            MEDICINE             momin                                 
+DR.EASHNA            CHILD-PEDIAIRIC      faisal                                
+DR.TAZKIRA           GYNAECOLOGIST        Mridul                                
+DR.RAFI              MEDICINE             didar                                 
+                                          taz                                   
+                                          Safa                                  
+                                          habib                                 
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+                                          seema                                 
+                                          zerin                                 
+                                          faisal                                
+
+14 rows selected.
+
+SQL> SELECT DOCTOR_NAME,SPECIALIST,HEALTH_STATUS,DISTRIBUTOR_NAME FROM DISTRIBUTION D LEFT JOIN SERVICE S ON D.COLUMN1=S.DISTRIBUTOR_ID LEFT JOIN MEDICAL M ON S.DOCTOR_ID=M.DOCTOR_ID;
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME                                                                
+--------------------                                                            
+DR.HOSNE ARA         GYNAECOLOGIST        cholera                               
+firoz                                                                           
+                                                                                
+DR.FOZLE RABBI       MEDICINE             pregnant                              
+Elan                                                                            
+                                                                                
+DR.SHARMIN           ENT                  malaria                               
+Alex                                                                            
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME                                                                
+--------------------                                                            
+DR.ABU JAFAR         ORTHOPEADIC          asthma                                
+Ratul                                                                           
+                                                                                
+DR.KIBRIA            MEDICINE             typhoid                               
+momin                                                                           
+                                                                                
+DR.EASHNA            CHILD-PEDIAIRIC      chicken_pox                           
+faisal                                                                          
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME                                                                
+--------------------                                                            
+DR.TAZKIRA           GYNAECOLOGIST        ligament injuries                     
+Mridul                                                                          
+                                                                                
+DR.RAFI              MEDICINE             pregnant                              
+didar                                                                           
+                                                                                
+                                                                                
+taz                                                                             
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME                                                                
+--------------------                                                            
+                                                                                
+Safa                                                                            
+                                                                                
+                                          cholera                               
+habib                                                                           
+                                                                                
+                                          malaria                               
+seema                                                                           
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME                                                                
+--------------------                                                            
+                                          pregnant                              
+zerin                                                                           
+                                                                                
+                                          jaundice                              
+faisal                                                                          
+                                                                                
+
+14 rows selected.
+
+SQL> SELECT COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine';
+
+COUNT(DONATION_TYPE)                                                            
+--------------------                                                            
+                   2                                                            
+
+SQL> SELECT donation_type,COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine';
+SELECT donation_type,COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine'
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine' and bonour_type='NGO' ;
+
+COUNT(DONATION_TYPE)                                                            
+--------------------                                                            
+                   0                                                            
+
+SQL> SELECT COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine' and bonour_type='WHO' ;
+
+COUNT(DONATION_TYPE)                                                            
+--------------------                                                            
+                   1                                                            
+
+SQL> SELECT bonour_type,COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine' ;
+SELECT bonour_type,COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine' 
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> SELECT bonour_type,COUNT(DONATION_TYPE) FROM DONATION group by bonour_type WHERE DONATION_TYPE='medicine' ;
+SELECT bonour_type,COUNT(DONATION_TYPE) FROM DONATION group by bonour_type WHERE DONATION_TYPE='medicine' 
+                                                                           *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> alter table donation rename column bonour_type to donor_type;
+
+Table altered.
+
+SQL> SELECT donor_type,COUNT(DONATION_TYPE) FROM DONATION group by bonour_type WHERE DONATION_TYPE='medicine' ;
+SELECT donor_type,COUNT(DONATION_TYPE) FROM DONATION group by bonour_type WHERE DONATION_TYPE='medicine' 
+                                                                          *
+ERROR at line 1:
+ORA-00933: SQL command not properly ended 
+
+
+SQL> SELECT donor_type,COUNT(DONATION_TYPE) FROM DONATION WHERE DONATION_TYPE='medicine' group by donor_type ;
+
+DONOR_TYPE           COUNT(DONATION_TYPE)                                       
+-------------------- --------------------                                       
+China                                   1                                       
+WHO                                     1                                       
+
+SQL> SELECT DOCTOR_NAME,SPECIALIST,HEALTH_STATUS,DISTRIBUTOR_NAME,column3 FROM DISTRIBUTION D LEFT JOIN SERVICE S ON D.COLUMN1=S.DISTRIBUTOR_ID LEFT JOIN MEDICAL M ON S.DOCTOR_ID=M.DOCTOR_ID;
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME     COLUMN3                                                    
+-------------------- --------------------                                       
+DR.HOSNE ARA         GYNAECOLOGIST        cholera                               
+firoz                local                                                      
+                                                                                
+DR.FOZLE RABBI       MEDICINE             pregnant                              
+Elan                 local                                                      
+                                                                                
+DR.SHARMIN           ENT                  malaria                               
+Alex                 volunteer                                                  
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME     COLUMN3                                                    
+-------------------- --------------------                                       
+DR.ABU JAFAR         ORTHOPEADIC          asthma                                
+Ratul                volunteer                                                  
+                                                                                
+DR.KIBRIA            MEDICINE             typhoid                               
+momin                NGO                                                        
+                                                                                
+DR.EASHNA            CHILD-PEDIAIRIC      chicken_pox                           
+faisal               volunteer                                                  
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME     COLUMN3                                                    
+-------------------- --------------------                                       
+DR.TAZKIRA           GYNAECOLOGIST        ligament injuries                     
+Mridul               NGO                                                        
+                                                                                
+DR.RAFI              MEDICINE             pregnant                              
+didar                UNHCR                                                      
+                                                                                
+                                                                                
+taz                  UNHCR                                                      
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME     COLUMN3                                                    
+-------------------- --------------------                                       
+                                                                                
+Safa                 UNHCR                                                      
+                                                                                
+                                          cholera                               
+habib                local                                                      
+                                                                                
+                                          malaria                               
+seema                volunteer                                                  
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           HEALTH_STATUS                         
+-------------------- -------------------- --------------------                  
+DISTRIBUTOR_NAME     COLUMN3                                                    
+-------------------- --------------------                                       
+                                          pregnant                              
+zerin                volunteer                                                  
+                                                                                
+                                          jaundice                              
+faisal               volunteer                                                  
+                                                                                
+
+14 rows selected.
+
+SQL> SELECT DOCTOR_NAME,SPECIALIST,DISTRIBUTOR_NAME,column3 FROM DISTRIBUTION D LEFT JOIN SERVICE S ON D.COLUMN1=S.DISTRIBUTOR_ID LEFT JOIN MEDICAL M ON S.DOCTOR_ID=M.DOCTOR_ID;
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+COLUMN3                                                                         
+--------------------                                                            
+DR.HOSNE ARA         GYNAECOLOGIST        firoz                                 
+local                                                                           
+                                                                                
+DR.FOZLE RABBI       MEDICINE             Elan                                  
+local                                                                           
+                                                                                
+DR.SHARMIN           ENT                  Alex                                  
+volunteer                                                                       
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+COLUMN3                                                                         
+--------------------                                                            
+DR.ABU JAFAR         ORTHOPEADIC          Ratul                                 
+volunteer                                                                       
+                                                                                
+DR.KIBRIA            MEDICINE             momin                                 
+NGO                                                                             
+                                                                                
+DR.EASHNA            CHILD-PEDIAIRIC      faisal                                
+volunteer                                                                       
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+COLUMN3                                                                         
+--------------------                                                            
+DR.TAZKIRA           GYNAECOLOGIST        Mridul                                
+NGO                                                                             
+                                                                                
+DR.RAFI              MEDICINE             didar                                 
+UNHCR                                                                           
+                                                                                
+                                          taz                                   
+UNHCR                                                                           
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+COLUMN3                                                                         
+--------------------                                                            
+                                          Safa                                  
+UNHCR                                                                           
+                                                                                
+                                          habib                                 
+local                                                                           
+                                                                                
+                                          seema                                 
+volunteer                                                                       
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           DISTRIBUTOR_NAME                      
+-------------------- -------------------- --------------------                  
+COLUMN3                                                                         
+--------------------                                                            
+                                          zerin                                 
+volunteer                                                                       
+                                                                                
+                                          faisal                                
+volunteer                                                                       
+                                                                                
+
+14 rows selected.
+
+SQL> select doctor_name,specialist,refugee_name,c.health_status from medical m left join service s on m.doctor_id=s.doctor_id left join camp c on c.serial_number=s.patient_id
+  2  ;
+
+DOCTOR_NAME          SPECIALIST           REFUGEE_NAME                          
+-------------------- -------------------- --------------------                  
+HEALTH_STATUS                                                                   
+--------------------                                                            
+DR.HOSNE ARA         GYNAECOLOGIST        momin                                 
+cholera                                                                         
+                                                                                
+DR.FOZLE RABBI       MEDICINE             sokina                                
+pregnant                                                                        
+                                                                                
+DR.SHARMIN           ENT                  abdullah                              
+malaria                                                                         
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           REFUGEE_NAME                          
+-------------------- -------------------- --------------------                  
+HEALTH_STATUS                                                                   
+--------------------                                                            
+DR.RAFI              MEDICINE             rahima                                
+pregnant                                                                        
+                                                                                
+DR.ABU JAFAR         ORTHOPEADIC          habiba                                
+healthy                                                                         
+                                                                                
+DR.KIBRIA            MEDICINE             rahima                                
+ligament injuries                                                               
+                                                                                
+
+DOCTOR_NAME          SPECIALIST           REFUGEE_NAME                          
+-------------------- -------------------- --------------------                  
+HEALTH_STATUS                                                                   
+--------------------                                                            
+DR.TAZKIRA           GYNAECOLOGIST        jakir                                 
+chicken pox                                                                     
+                                                                                
+DR.EASHNA            CHILD-PEDIAIRIC      fahim                                 
+malnutrition                                                                    
+                                                                                
+
+8 rows selected.
+
+SQL> select phone_number and checkup_date from medical;
+select phone_number and checkup_date from medical
+                    *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> select phone_number ,checkup_date from medical;
+select phone_number ,checkup_date from medical
+       *
+ERROR at line 1:
+ORA-00904: "PHONE_NUMBER": invalid identifier 
+
+
+SQL> select refugee_name ,c.health_status,doctor_name,checkup_date+7 from service s left join camp c on s.patient_id=c.serial_number left join medical m on m.doctor_id=s.doctor_id;
+
+REFUGEE_NAME         HEALTH_STATUS        DOCTOR_NAME          CHECKUP_D        
+-------------------- -------------------- -------------------- ---------        
+momin                cholera              DR.HOSNE ARA         17-SEP-17        
+sokina               pregnant             DR.FOZLE RABBI       18-SEP-17        
+abdullah             malaria              DR.SHARMIN           18-SEP-17        
+rahima               pregnant             DR.RAFI              20-SEP-17        
+razzaq               jaundice                                                   
+fatima               malaria                                                    
+habiba               healthy              DR.ABU JAFAR         19-SEP-17        
+naseer               healthy                                                    
+rahima               ligament injuries    DR.KIBRIA            20-SEP-17        
+jakir                chicken pox          DR.TAZKIRA           21-SEP-17        
+fahim                malnutrition         DR.EASHNA            20-SEP-17        
+
+REFUGEE_NAME         HEALTH_STATUS        DOCTOR_NAME          CHECKUP_D        
+-------------------- -------------------- -------------------- ---------        
+                                                                                
+
+12 rows selected.
+
+SQL> select donation_type,block from donation d left join service s on d.distributor_id=s.distributor_id left join camp c on c.serial_number=s.patient_id;
+
+DONATION_TYPE        BLOCK                                                      
+-------------------- -----                                                      
+food                 A                                                          
+tent                 C                                                          
+medicine             B                                                          
+food                 C                                                          
+medicine             C                                                          
+cloth                B                                                          
+baby food            A                                                          
+warm cloth                                                                      
+cloth                                                                           
+baby food                                                                       
+accessories                                                                     
+
+DONATION_TYPE        BLOCK                                                      
+-------------------- -----                                                      
+accessoris                                                                      
+
+12 rows selected.
+
+SQL> select donation_type,block from donation d right join service s on d.distributor_id=s.distributor_id right join camp c on c.serial_number=s.patient_id;
+
+DONATION_TYPE        BLOCK                                                      
+-------------------- -----                                                      
+food                 A                                                          
+                     B                                                          
+                     C                                                          
+tent                 C                                                          
+                     A                                                          
+medicine             B                                                          
+                     A                                                          
+food                 C                                                          
+                     B                                                          
+                     B                                                          
+medicine             C                                                          
+
+DONATION_TYPE        BLOCK                                                      
+-------------------- -----                                                      
+                     A                                                          
+                     A                                                          
+                     C                                                          
+cloth                B                                                          
+baby food            A                                                          
+                     C                                                          
+                     B                                                          
+                     A                                                          
+
+19 rows selected.
+
+SQL> select max(count(entry_date)) from camp;
+select max(count(entry_date)) from camp
+           *
+ERROR at line 1:
+ORA-00978: nested group function without GROUP BY 
+
+
+SQL> select max(count(entry_date))  group by entry_date from camp;
+select max(count(entry_date))  group by entry_date from camp
+                               *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> select max(count(entry_date)) from camp group by entry_date;
+
+MAX(COUNT(ENTRY_DATE))                                                          
+----------------------                                                          
+                     3                                                          
+
+SQL> select entry_date from camp where =some (select max(count(entry_date)) from camp group by entry_date);
+select entry_date from camp where =some (select max(count(entry_date)) from camp group by entry_date)
+                                  *
+ERROR at line 1:
+ORA-00936: missing expression 
+
+
+SQL> select entry_date from camp where entry_date =some (select max(count(entry_date)) from camp group by entry_date);
+select entry_date from camp where entry_date =some (select max(count(entry_date)) from camp group by entry_date)
+                                             *
+ERROR at line 1:
+ORA-00932: inconsistent datatypes: expected DATE got NUMBER 
+
+
+SQL> select max(count(serial_number)) from camp group by month;
+select max(count(serial_number)) from camp group by month
+                                                    *
+ERROR at line 1:
+ORA-00904: "MONTH": invalid identifier 
+
+
+SQL> select max(count(serial_number)) from camp group by entry_date;
+
+MAX(COUNT(SERIAL_NUMBER))                                                       
+-------------------------                                                       
+                        3                                                       
+
+SQL> select max(serial_number) from camp group by entry_date;
+
+MAX(SERIAL_NUMBER)                                                              
+------------------                                                              
+                17                                                              
+                14                                                              
+                18                                                              
+                13                                                              
+                15                                                              
+                12                                                              
+                 7                                                              
+                16                                                              
+                11                                                              
+                19                                                              
+                 3                                                              
+
+11 rows selected.
+
+SQL> select table_name from users;
+select table_name from users
+                       *
+ERROR at line 1:
+ORA-00942: table or view does not exist 
+
+
+SQL> select table_name from user_tables;
+
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+DISTRIBUTION                                                                    
+SERVICE                                                                         
+MEDICAL                                                                         
+DONATION                                                                        
+CAMP                                                                            
+EMP                                                                             
+DEPT                                                                            
+SAL                                                                             
+T3                                                                              
+T2                                                                              
+T1                                                                              
+
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+DATAE_TAB                                                                       
+CUSTOMER                                                                        
+BRANCH                                                                          
+DEPARTMENT                                                                      
+EMPLOYEE                                                                        
+STDNT                                                                           
+
+17 rows selected.
+
+SQL> select constraint_name,constraint_type,table_name from user_constraints where constraint_type='P';
+
+CONSTRAINT_NAME                                                                 
+--------------------------------------------------------------------------------
+C                                                                               
+-                                                                               
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+CAMP_PK                                                                         
+P                                                                               
+CAMP                                                                            
+                                                                                
+SYS_C0010102                                                                    
+P                                                                               
+EMP                                                                             
+
+CONSTRAINT_NAME                                                                 
+--------------------------------------------------------------------------------
+C                                                                               
+-                                                                               
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+                                                                                
+SYS_C0010100                                                                    
+P                                                                               
+DEPT                                                                            
+                                                                                
+SYS_C0010099                                                                    
+P                                                                               
+
+CONSTRAINT_NAME                                                                 
+--------------------------------------------------------------------------------
+C                                                                               
+-                                                                               
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+SAL                                                                             
+                                                                                
+
+SQL> select constraint_name,constraint_type,table_name from user_constraints where constraint_type='R';
+
+CONSTRAINT_NAME                                                                 
+--------------------------------------------------------------------------------
+C                                                                               
+-                                                                               
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+SYS_C0010103                                                                    
+R                                                                               
+EMP                                                                             
+                                                                                
+SYS_C0010101                                                                    
+R                                                                               
+DEPT                                                                            
+
+CONSTRAINT_NAME                                                                 
+--------------------------------------------------------------------------------
+C                                                                               
+-                                                                               
+TABLE_NAME                                                                      
+--------------------------------------------------------------------------------
+                                                                                
+
+SQL> select gender,round(100* ratio_to_report(count(*))over(),20;
+select gender,round(100* ratio_to_report(count(*))over(),20
+                                                          *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> select gender,round(100* ratio_to_report(count(*))over(),2);
+select gender,round(100* ratio_to_report(count(*))over(),2)
+                                                          *
+ERROR at line 1:
+ORA-00923: FROM keyword not found where expected 
+
+
+SQL> select gender,round(100* ratio_to_report(count(*))over(),2) from camp;
+select gender,round(100* ratio_to_report(count(*))over(),2) from camp
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> 
+SQL> select gender,round(100* ratio_to_report(count(*))over(),2) perc from camp group by gender;
+
+GENDER           PERC                                                           
+---------- ----------                                                           
+male            52.63                                                           
+female          47.37                                                           
+
+SQL> select health_status,round(100* ratio_to_report(count(*))over(),2) perc from camp group by health_status;
+
+HEALTH_STATUS              PERC                                                 
+-------------------- ----------                                                 
+chicken pox                5.26                                                 
+pregnant                  10.53                                                 
+typhoid                    5.26                                                 
+ligament injuries         10.53                                                 
+malnutrition               5.26                                                 
+malaria                   10.53                                                 
+HIV                        5.26                                                 
+cholera                   10.53                                                 
+healthy                   31.58                                                 
+jaundice                   5.26                                                 
+
+10 rows selected.
+
+SQL> select health_status,round(100* ratio_to_report(count(*))over(),2) perc from camp where health_status!='healthy';
+select health_status,round(100* ratio_to_report(count(*))over(),2) perc from camp where health_status!='healthy'
+       *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> select health_status,round(100* ratio_to_report(count(*))over(),2) perc from camp where health_status!='healthy' group by health_status;
+
+HEALTH_STATUS              PERC                                                 
+-------------------- ----------                                                 
+chicken pox                7.69                                                 
+pregnant                  15.38                                                 
+typhoid                    7.69                                                 
+ligament injuries         15.38                                                 
+malnutrition               7.69                                                 
+malaria                   15.38                                                 
+HIV                        7.69                                                 
+cholera                   15.38                                                 
+jaundice                   7.69                                                 
+
+9 rows selected.
+
+SQL> select count(health_status) from camp where health_status!='healthy';
+
+COUNT(HEALTH_STATUS)                                                            
+--------------------                                                            
+                  13                                                            
+
+SQL> select health_status,((select count(health_status) from camp where health_status!='healthy')/(select count(health_status) from cAmp))*100 from camp;
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+cholera                                                                         
+                                                                      68.4210526
+                                                                                
+healthy                                                                         
+                                                                      68.4210526
+                                                                                
+pregnant                                                                        
+                                                                      68.4210526
+                                                                                
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+malaria                                                                         
+                                                                      68.4210526
+                                                                                
+healthy                                                                         
+                                                                      68.4210526
+                                                                                
+pregnant                                                                        
+                                                                      68.4210526
+                                                                                
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+jaundice                                                                        
+                                                                      68.4210526
+                                                                                
+malaria                                                                         
+                                                                      68.4210526
+                                                                                
+healthy                                                                         
+                                                                      68.4210526
+                                                                                
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+healthy                                                                         
+                                                                      68.4210526
+                                                                                
+healthy                                                                         
+                                                                      68.4210526
+                                                                                
+cholera                                                                         
+                                                                      68.4210526
+                                                                                
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+healthy                                                                         
+                                                                      68.4210526
+                                                                                
+typhoid                                                                         
+                                                                      68.4210526
+                                                                                
+ligament injuries                                                               
+                                                                      68.4210526
+                                                                                
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+chicken pox                                                                     
+                                                                      68.4210526
+                                                                                
+malnutrition                                                                    
+                                                                      68.4210526
+                                                                                
+ligament injuries                                                               
+                                                                      68.4210526
+                                                                                
+
+HEALTH_STATUS                                                                   
+--------------------                                                            
+((SELECTCOUNT(HEALTH_STATUS)FROMCAMPWHEREHEALTH_STATUS!='HEALTHY')/(SELECTCOUNT(
+--------------------------------------------------------------------------------
+HIV                                                                             
+                                                                      68.4210526
+                                                                                
+
+19 rows selected.
+
+SQL> select ((select count(health_status) from camp where health_status!='healthy')/(select count(health_status) from cAmp))*100 as unhealthy from camp ;
+
+ UNHEALTHY                                                                      
+----------                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+
+ UNHEALTHY                                                                      
+----------                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+68.4210526                                                                      
+
+19 rows selected.
+
+SQL> select ((select count(health_status) from camp where health_status!='healthy')/(count(health_status))*100 as unhealthy from camp ;
+select ((select count(health_status) from camp where health_status!='healthy')/(count(health_status))*100 as unhealthy from camp 
+                                                                                                          *
+ERROR at line 1:
+ORA-00907: missing right parenthesis 
+
+
+SQL> select ((select count(health_status) from camp where health_status!='healthy')/(count(health_status)))*100 as unhealthy from camp ;
+select ((select count(health_status) from camp where health_status!='healthy')/(count(health_status)))*100 as unhealthy from camp 
+                *
+ERROR at line 1:
+ORA-00937: not a single-group group function 
+
+
+SQL> spool off;
